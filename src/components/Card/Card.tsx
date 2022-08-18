@@ -3,14 +3,18 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
   Card as MCard,
   CardContent,
   CardMedia,
   Typography,
 } from "@mui/material"
-import { FC, lazy, Suspense } from "react"
+import { FC, lazy, useState } from "react"
 import { Link } from "react-router-dom"
-import { useGetCityHourlyQuery, useGetCityQuery } from "../../app/api"
+import { useGetCityQuery } from "../../app/api"
+import { useAppDispatch } from "../../app/hooks"
+import { deleteCity } from "../../app/weatherSlice"
+import CelciusIcon from "../CelciusIcon"
 const Chart = lazy(() => import("../../components/Chart"))
 
 interface Props {
@@ -19,32 +23,35 @@ interface Props {
 }
 
 const Card: FC<Props> = ({ city, extended = false }) => {
+  const dispatch = useAppDispatch()
   const { data, error, refetch, isLoading } = useGetCityQuery(city)
-  const {
-    data: dataHourly,
-    isLoading: isLoadingHourly,
-    refetch: refetchExtended,
-  } = extended
-    ? useGetCityHourlyQuery(city)
-    : { data: [], isLoading: false, refetch: () => {} }
+  const [expanded, setExpanded] = useState<string | false>(extended && "panel1")
+
+  const handledeleteCity = (name: string) => dispatch(deleteCity(name))
 
   if (error)
-    return <>Error while loading, probably you entered city name wrong</>
+    return (
+      <>
+        Error while loading <b>{city}</b>, probably you entered city name wrong.
+        <Button variant="contained" onClick={() => handledeleteCity(city)}>
+          Delete
+        </Button>{" "}
+        this city
+      </>
+    )
   if (isLoading) return <></>
 
-  const { main, weather, wind } = data
+  const { main, weather } = data
 
-  console.log("wind:", wind)
-
-  const refetchData = () => {
-    if (extended) refetchExtended()
-    refetch()
-  }
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false)
+    }
 
   return (
     <>
       <MCard variant="outlined">
-        <button onClick={refetchData}>Refetch</button>
+        <button onClick={refetch}>Update data</button>
         <CardContent>
           <Link to={`/${data.name}`}>
             <Typography variant="h5" component="span">
@@ -58,7 +65,13 @@ const Card: FC<Props> = ({ city, extended = false }) => {
             style={{ aspectRatio: "1/1", width: "unset" }}
             alt={weather[0].main}
           />
-          <Accordion>
+          <Typography variant="h5" component="div">
+            {weather[0].description}
+          </Typography>
+          <Accordion
+            expanded={expanded === "panel1"}
+            onChange={handleChange("panel1")}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -67,25 +80,28 @@ const Card: FC<Props> = ({ city, extended = false }) => {
               <Typography>Extend data</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              {extended && (
-                <ul>
-                  <li>feels_like: {Math.round(main.feels_like)}</li>
-                  <li>temp: {Math.round(main.temp)}</li>
-                  <li>temp_max: {Math.round(main.temp_max)}</li>
-                  <li>temp_min: {Math.round(main.temp_min)}</li>
-                  <li>humidity: {Math.round(main.humidity)}</li>
-                </ul>
-              )}
+              <ul>
+                <li>
+                  feels_like: {Math.round(main.feels_like)} <CelciusIcon />
+                </li>
+                <li>
+                  temp: {Math.round(main.temp)} <CelciusIcon />
+                </li>
+                <li>
+                  temp_max: {Math.round(main.temp_max)} <CelciusIcon />
+                </li>
+                <li>
+                  temp_min: {Math.round(main.temp_min)} <CelciusIcon />
+                </li>
+                <li>
+                  humidity: {Math.round(main.humidity)} <CelciusIcon />
+                </li>
+              </ul>
             </AccordionDetails>
           </Accordion>
-          <Typography variant="h5" component="div">
-            {weather[0].description}
-          </Typography>
         </CardContent>
       </MCard>
-      <Suspense fallback={<></>}>
-        {!isLoadingHourly && extended && <Chart data={dataHourly} />}
-      </Suspense>
+      {extended && <Chart key={data} city={city} />}
     </>
   )
 }

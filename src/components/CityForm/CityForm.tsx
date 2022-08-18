@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { RootState } from "../../app/store"
-import { setCities } from "../../app/weatherSlice"
+import { deleteCity, setCities } from "../../app/weatherSlice"
 import { ICity } from "../../types"
+import { setError, setSuccess } from "../../app/appSlice"
+import { Checkbox, FormControlLabel, List, ListItem } from "@mui/material"
 
 const CityForm = () => {
   const dispatch = useAppDispatch()
@@ -17,21 +19,18 @@ const CityForm = () => {
     e.preventDefault()
     const isExist = cities.findIndex((c: ICity) => c.name === city)
     console.log("isExist:", isExist)
-    if (isExist !== -1) return
+    if (isExist !== -1) return dispatch(setError("City already exist"))
     dispatch(
       setCities([
         ...cities,
         { name: city, show: true, id: new Date().getTime() },
       ])
     )
+    dispatch(setSuccess("City added"))
     setCity("")
   }
-  const deleteCity = (id: number) => {
-    const citiesClone = [...cities]
-    const index = cities.findIndex((c: ICity) => c.id === id)
-    citiesClone.splice(index, 1)
-    dispatch(setCities(citiesClone))
-  }
+
+  const handledeleteCity = (name: string) => dispatch(deleteCity(name))
 
   const handleCityShow = (id: number) => {
     const citiesClone: ICity[] = JSON.parse(JSON.stringify(cities))
@@ -42,21 +41,22 @@ const CityForm = () => {
   return (
     <>
       {!!cities.length && (
-        <ul>
+        <List>
           {cities.map((city: ICity) => (
-            <li key={city.id}>
-              <input
-                type="checkbox"
-                name={city.id.toString()}
-                id={city.id.toString()}
-                onChange={() => handleCityShow(city.id)}
-                checked={city.show}
+            <ListItem key={city.id}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={city.show}
+                    onChange={() => handleCityShow(city.id)}
+                  />
+                }
+                label={city.name}
               />
-              <label htmlFor={city.id.toString()}>{city.name}</label>
-              <button onClick={() => deleteCity(city.id)}>x</button>
-            </li>
+              <button onClick={() => handledeleteCity(city.name)}>x</button>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       )}
       <form onSubmit={addCity}>
         <input
@@ -65,6 +65,8 @@ const CityForm = () => {
           id="new_city"
           value={city}
           onChange={handleCityInput}
+          minLength={2}
+          maxLength={40}
         />
         <button type="submit">Add city</button>
       </form>
