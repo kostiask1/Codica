@@ -1,3 +1,4 @@
+import { ICity } from "../types"
 export interface WeatherState {
-  value: number
+  cities: ICity[]
 }

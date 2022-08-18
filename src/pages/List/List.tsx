@@ -1,10 +1,11 @@
-import CityForm from "../../components/CityForm"
-import { useLocalStorage } from "../../hooks/useLocalStorage"
+import { useAppSelector } from "../../app/hooks"
+import { RootState } from "../../app/store"
 import Card from "../../components/Card/Card"
+import CityForm from "../../components/CityForm"
 import { ICity } from "../../types"
 
 const List = () => {
-  const [cities] = useLocalStorage("cities", [])
+  const cities = useAppSelector((state: RootState) => state.weather.cities)
   return (
     <>
       <CityForm />

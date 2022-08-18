@@ -7,6 +7,8 @@ export const store = configureStore({
     weather: weatherReducer,
     weatherApi: weatherApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(weatherApi.middleware),
 })
 
 export type RootState = ReturnType<typeof store.getState>

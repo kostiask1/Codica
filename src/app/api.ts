@@ -11,7 +11,7 @@ export const weatherApi = createApi({
       query: (city) => `weather?q=${city}&appid=${key}&units=metric`,
     }),
     getCityHourly: builder.query({
-      query: (city) => `forecast/hourly?q=${city}&appid=${key}&units=metric`,
+      query: (city) => `forecast?q=${city}&appid=${key}&units=metric`,
     }),
   }),
 })

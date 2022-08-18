@@ -1,9 +1,12 @@
-import { useLocalStorage } from "../../hooks"
 import { useState } from "react"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { RootState } from "../../app/store"
+import { setCities } from "../../app/weatherSlice"
 import { ICity } from "../../types"
 
 const CityForm = () => {
-  const [cities, setCities] = useLocalStorage("cities", [])
+  const dispatch = useAppDispatch()
+  const cities = useAppSelector((state: RootState) => state.weather.cities)
   const [city, setCity] = useState("")
 
   const handleCityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,21 +18,26 @@ const CityForm = () => {
     const isExist = cities.findIndex((c: ICity) => c.name === city)
     console.log("isExist:", isExist)
     if (isExist !== -1) return
-    setCities([...cities, { name: city, show: true, id: new Date().getTime() }])
+    dispatch(
+      setCities([
+        ...cities,
+        { name: city, show: true, id: new Date().getTime() },
+      ])
+    )
     setCity("")
   }
   const deleteCity = (id: number) => {
     const citiesClone = [...cities]
     const index = cities.findIndex((c: ICity) => c.id === id)
     citiesClone.splice(index, 1)
-    setCities(citiesClone)
+    dispatch(setCities(citiesClone))
   }
 
   const handleCityShow = (id: number) => {
-    const citiesClone = [...cities]
+    const citiesClone: ICity[] = JSON.parse(JSON.stringify(cities))
     const index = citiesClone.findIndex((city) => city.id === id)
     citiesClone[index].show = !citiesClone[index].show
-    setCities(citiesClone)
+    dispatch(setCities(citiesClone))
   }
   return (
     <>
