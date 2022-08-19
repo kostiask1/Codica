@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom"
 import { useAppDispatch } from "./app/hooks"
 import { setCities } from "./app/weatherSlice"
 import Snackbar from "./Snackbar/Snackbar"
+import Navigation from "./components/Navigation/Navigation"
 const City = lazy(() => import("./pages/City/City"))
 const List = lazy(() => import("./pages/List/List"))
 
@@ -29,6 +30,7 @@ function App() {
   })
   return (
     <ThemeProvider theme={theme}>
+      <Navigation />
       <Container>
         <Suspense fallback={<></>}>
           <Routes>

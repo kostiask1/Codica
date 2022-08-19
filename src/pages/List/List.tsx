@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material"
 import { useAppSelector } from "../../app/hooks"
 import { RootState } from "../../app/store"
 import Card from "../../components/Card/Card"
@@ -9,10 +10,17 @@ const List = () => {
   return (
     <>
       <CityForm />
-      {!!cities.length &&
-        cities.map(
-          (city: ICity) => city.show && <Card key={city.id} city={city.name} />
-        )}
+      <Grid container spacing={2}>
+        {!!cities.length &&
+          cities.map(
+            (city: ICity) =>
+              city.show && (
+                <Grid item xs={6} key={city.id}>
+                  <Card city={city.name} />
+                </Grid>
+              )
+          )}
+      </Grid>
     </>
   )
 }

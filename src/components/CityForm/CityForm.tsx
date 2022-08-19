@@ -4,7 +4,14 @@ import { RootState } from "../../app/store"
 import { deleteCity, setCities } from "../../app/weatherSlice"
 import { ICity } from "../../types"
 import { setError, setSuccess } from "../../app/appSlice"
-import { Checkbox, FormControlLabel, List, ListItem } from "@mui/material"
+import { Box, Button } from "@mui/material"
+import {
+  Checkbox,
+  FormControlLabel,
+  List,
+  ListItem,
+  TextField,
+} from "@mui/material"
 
 const CityForm = () => {
   const dispatch = useAppDispatch()
@@ -12,11 +19,13 @@ const CityForm = () => {
   const [city, setCity] = useState("")
 
   const handleCityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCity(e.target.value.trim())
+    const value = e.target.value
+    if (value.trim().length < 40) setCity(value)
   }
 
   const addCity = (e: React.FormEvent) => {
     e.preventDefault()
+    if (city.length < 2) return dispatch(setError("City name is too short"))
     const isExist = cities.findIndex((c: ICity) => c.name === city)
     console.log("isExist:", isExist)
     if (isExist !== -1) return dispatch(setError("City already exist"))
@@ -58,18 +67,27 @@ const CityForm = () => {
           ))}
         </List>
       )}
-      <form onSubmit={addCity}>
-        <input
-          type="text"
-          name="new_city"
-          id="new_city"
+      <Box
+        component="form"
+        mb={2}
+        sx={{
+          "& > :not(style)": { mx: 1 },
+        }}
+        onSubmit={addCity}
+      >
+        <TextField
+          id="city"
+          label="City Name"
+          variant="outlined"
           value={city}
           onChange={handleCityInput}
-          minLength={2}
-          maxLength={40}
+          autoComplete="off"
+          size="small"
         />
-        <button type="submit">Add city</button>
-      </form>
+        <Button type="submit" variant="contained">
+          Add city
+        </Button>
+      </Box>
     </>
   )
 }

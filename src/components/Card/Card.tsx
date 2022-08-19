@@ -7,6 +7,9 @@ import {
   Card as MCard,
   CardContent,
   CardMedia,
+  List,
+  ListItem,
+  ListItemText,
   Typography,
 } from "@mui/material"
 import { FC, lazy, useState } from "react"
@@ -14,7 +17,9 @@ import { Link } from "react-router-dom"
 import { useGetCityQuery } from "../../app/api"
 import { useAppDispatch } from "../../app/hooks"
 import { deleteCity } from "../../app/weatherSlice"
-import CelciusIcon from "../CelciusIcon"
+import RefreshIcon from "@mui/icons-material/Refresh"
+import { Box } from "@mui/material"
+import { Grid } from "@mui/material"
 const Chart = lazy(() => import("../../components/Chart"))
 
 interface Props {
@@ -41,7 +46,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
     )
   if (isLoading) return <></>
 
-  const { main, weather } = data
+  const { main, weather, wind } = data
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
@@ -50,26 +55,34 @@ const Card: FC<Props> = ({ city, extended = false }) => {
 
   return (
     <>
-      <MCard variant="outlined">
-        <button onClick={refetch}>Update data</button>
+      <MCard variant="outlined" sx={{ backgroundColor: "#9ce2ff" }}>
+        <Button onClick={refetch} variant="contained">
+          <RefreshIcon /> Update data
+        </Button>
         <CardContent>
-          <Link to={`/${data.name}`}>
-            <Typography variant="h5" component="span">
-              {data.name}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Link to={`/${data.name}`}>
+              <Typography variant="h4" component="span">
+                {data.name}
+              </Typography>
+            </Link>
+            <Typography sx={{ ml: 5 }} variant="h6">
+              {Math.round(main.temp)} °C
             </Typography>
-          </Link>
-          <CardMedia
-            component="img"
-            height="60"
-            image={`http://openweathermap.org/img/wn/${weather[0].icon}@2x.png`}
-            style={{ aspectRatio: "1/1", width: "unset" }}
-            alt={weather[0].main}
-          />
+            <CardMedia
+              component="img"
+              height="60"
+              image={`http://openweathermap.org/img/wn/${weather[0].icon}@2x.png`}
+              style={{ aspectRatio: "1/1", width: "unset" }}
+              alt={weather[0].main}
+            />
+          </Box>
           <Typography variant="h5" component="div">
             {weather[0].description}
           </Typography>
           <Accordion
             expanded={expanded === "panel1"}
+            sx={{ mt: 2 }}
             onChange={handleChange("panel1")}
           >
             <AccordionSummary
@@ -77,26 +90,73 @@ const Card: FC<Props> = ({ city, extended = false }) => {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>Extend data</Typography>
+              <Typography>
+                {expanded === "panel1" ? "Hide" : "Extend"} data
+              </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <ul>
-                <li>
-                  feels_like: {Math.round(main.feels_like)} <CelciusIcon />
-                </li>
-                <li>
-                  temp: {Math.round(main.temp)} <CelciusIcon />
-                </li>
-                <li>
-                  temp_max: {Math.round(main.temp_max)} <CelciusIcon />
-                </li>
-                <li>
-                  temp_min: {Math.round(main.temp_min)} <CelciusIcon />
-                </li>
-                <li>
-                  humidity: {Math.round(main.humidity)} <CelciusIcon />
-                </li>
-              </ul>
+              <Grid container spacing={2}>
+                <Grid item xs={5}>
+                  <List>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        sx={{ maxWidth: 90 }}
+                        primary="Feels like:"
+                      />
+                      <ListItemText
+                        primary={`${Math.round(main.feels_like)} °C`}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText sx={{ maxWidth: 90 }} primary="Temp max:" />
+                      <ListItemText
+                        primary={`${Math.round(main.temp_max)} °C`}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText sx={{ maxWidth: 90 }} primary="Temp min:" />
+                      <ListItemText
+                        primary={`${Math.round(main.temp_min)} °C`}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText sx={{ maxWidth: 90 }} primary="Humidity:" />
+                      <ListItemText primary={`${Math.round(main.humidity)}%`} />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText sx={{ maxWidth: 90 }} primary="Pressure:" />
+                      <ListItemText
+                        primary={`${Math.round(main.pressure)} hPa`}
+                      />
+                    </ListItem>
+                  </List>
+                </Grid>
+                <Grid item xs>
+                  <List>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        sx={{ maxWidth: 115 }}
+                        primary="Wind speed:"
+                      />
+                      <ListItemText primary={`${wind.speed} metre/sec`} />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        sx={{ maxWidth: 115 }}
+                        primary="Wind direction:"
+                      />
+                      <ListItemText primary={`${wind.deg} °Deg`} />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        sx={{ maxWidth: 115 }}
+                        primary="Wind gust:"
+                      />
+                      <ListItemText primary={`${wind.gust} metre/sec`} />
+                    </ListItem>
+                  </List>
+                </Grid>
+              </Grid>
             </AccordionDetails>
           </Accordion>
         </CardContent>
