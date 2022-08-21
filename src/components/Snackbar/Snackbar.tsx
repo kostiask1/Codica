@@ -1,8 +1,8 @@
 import { Alert } from "@mui/material"
-import { useAppSelector, useAppDispatch } from "../app/hooks"
-import { RootState } from "../app/store"
+import { useAppSelector, useAppDispatch } from "../../app/hooks"
+import { RootState } from "../../app/store"
 import Snack from "@mui/material/Snackbar"
-import { setError, setSuccess } from "../app/appSlice"
+import { setError, setSuccess } from "../../app/appSlice"
 const Snackbar = () => {
   const dispatch = useAppDispatch()
   const { error, success } = useAppSelector((state: RootState) => ({
