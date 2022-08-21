@@ -5,6 +5,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  IconButton,
   Card as MCard,
   CardContent,
   CardMedia,
@@ -19,6 +20,8 @@ import { Link } from "react-router-dom"
 import { useGetCityQuery } from "../../app/api"
 import { useAppDispatch } from "../../app/hooks"
 import { deleteCity } from "../../app/weatherSlice"
+import CloseIcon from "@mui/icons-material/Close"
+import { Box } from "@mui/material"
 const Chart = lazy(() => import("../../components/Chart"))
 
 interface Props {
@@ -32,7 +35,6 @@ const Card: FC<Props> = ({ city, extended = false }) => {
   const [expanded, setExpanded] = useState<string | false>(extended && "panel1")
 
   const handledeleteCity = (name: string) => dispatch(deleteCity(name))
-
   if (error)
     return (
       <>
@@ -55,9 +57,22 @@ const Card: FC<Props> = ({ city, extended = false }) => {
   return (
     <>
       <MCard variant="outlined" sx={{ backgroundColor: "#9ce2ff" }}>
-        <Button onClick={refetch} variant="contained" endIcon={<RefreshIcon />}>
-          Update data
-        </Button>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Button
+            onClick={refetch}
+            variant="contained"
+            endIcon={<RefreshIcon />}
+          >
+            Update data
+          </Button>
+          <IconButton
+            color="error"
+            size="small"
+            onClick={() => handledeleteCity(data.name)}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
         <CardContent>
           <Link
             to={`/${data.name}`}
@@ -78,7 +93,8 @@ const Card: FC<Props> = ({ city, extended = false }) => {
             />
           </Link>
           <Typography variant="h5" component="div">
-            {weather[0].description}
+            {weather[0].description.charAt(0).toUpperCase() +
+              weather[0].description.slice(1)}
           </Typography>
           <Accordion
             expanded={expanded === "panel1"}

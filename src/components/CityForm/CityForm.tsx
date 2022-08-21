@@ -4,9 +4,8 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  Grid,
   IconButton,
-  List,
-  ListItem,
   TextField,
 } from "@mui/material"
 import { useState } from "react"
@@ -30,7 +29,6 @@ const CityForm = () => {
     e.preventDefault()
     if (city.length < 2) return dispatch(setError("City name is too short"))
     const isExist = cities.findIndex((c: ICity) => c.name === city)
-    console.log("isExist:", isExist)
     if (isExist !== -1) return dispatch(setError("City already exist"))
     dispatch(
       setCities([
@@ -53,9 +51,9 @@ const CityForm = () => {
   return (
     <>
       {!!cities.length && (
-        <List>
+        <Grid container>
           {cities.map((city: ICity) => (
-            <ListItem key={city.id}>
+            <Grid item xs={4} key={city.id}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -72,18 +70,11 @@ const CityForm = () => {
               >
                 <CloseIcon />
               </IconButton>
-            </ListItem>
+            </Grid>
           ))}
-        </List>
+        </Grid>
       )}
-      <Box
-        component="form"
-        mb={2}
-        sx={{
-          "& > :not(style)": { mx: 1 },
-        }}
-        onSubmit={addCity}
-      >
+      <Box component="form" mb={2} onSubmit={addCity}>
         <TextField
           id="city"
           label="City Name"
@@ -93,7 +84,7 @@ const CityForm = () => {
           autoComplete="off"
           size="small"
         />
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" sx={{ ml: 1 }}>
           Add city
         </Button>
       </Box>
