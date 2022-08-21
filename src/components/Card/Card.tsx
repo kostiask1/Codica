@@ -22,6 +22,7 @@ import { Link } from "react-router-dom"
 import { useGetCityQuery } from "../../app/api"
 import { useAppDispatch } from "../../app/hooks"
 import { deleteCity } from "../../app/weatherSlice"
+import { setSuccess } from "../../app/appSlice"
 const Chart = lazy(() => import("../../components/Chart"))
 
 interface Props {
@@ -45,7 +46,12 @@ const Card: FC<Props> = ({ city, extended = false }) => {
     return (
       <>
         Error while loading <b>{city}</b>, probably you entered city name wrong.
-        <Button variant="contained" onClick={(e) => handleDeleteCity(e, city)}>
+        <Button
+          variant="contained"
+          size="small"
+          color="error"
+          onClick={(e) => handleDeleteCity(e, city)}
+        >
           Delete
         </Button>{" "}
         this city
@@ -55,7 +61,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
 
   const { main, weather, wind } = data
 
-  const handleChange =
+  const handleAccordeon =
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false)
     }
@@ -63,6 +69,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
   const refetchData = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     refetch()
+    dispatch(setSuccess(`Data about ${city} city is refreshed`))
   }
 
   return (
@@ -108,7 +115,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
             <Accordion
               expanded={expanded === "panel1"}
               sx={{ mt: 2 }}
-              onChange={handleChange("panel1")}
+              onChange={handleAccordeon("panel1")}
               onClick={(e: React.MouseEvent<HTMLElement>) => e.preventDefault()}
             >
               <AccordionSummary
