@@ -6,7 +6,7 @@ import { setCities } from "./app/weatherSlice"
 import Snackbar from "./components/Snackbar/Snackbar"
 import Navigation from "./components/Navigation/Navigation"
 const City = lazy(() => import("./pages/City/City"))
-const List = lazy(() => import("./pages/List/List"))
+const List = lazy(() => import("./pages/List"))
 
 function App() {
   const dispatch = useAppDispatch()
@@ -19,12 +19,7 @@ function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        // Purple and green play nicely together.
         main: "rgb(102, 178, 255)",
-      },
-      secondary: {
-        // This is green.A700 as hex.
-        main: "#11cb5f",
       },
     },
   })

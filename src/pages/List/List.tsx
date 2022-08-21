@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material"
 import { useAppSelector } from "../../app/hooks"
 import { RootState } from "../../app/store"
-import Card from "../../components/Card/Card"
+import Card from "../../components/Card"
 import CityForm from "../../components/CityForm"
 import { ICity } from "../../types"
 
