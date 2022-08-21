@@ -22,7 +22,8 @@ const CityForm = () => {
 
   const handleCityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    if (value.trim().length < 40) setCity(value)
+    if (value.trim().length < 40)
+      setCity(value.charAt(0).toUpperCase() + value.slice(1))
   }
 
   const addCity = (e: React.FormEvent) => {
