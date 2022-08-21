@@ -5,7 +5,9 @@ import WestIcon from "@mui/icons-material/West"
 
 const Navigation = () => {
   const navigate = useNavigate()
+
   const hasBackPage = !!window.history.state.idx
+  const hasForwardPage = window.history.length > 2 && !hasBackPage
   return (
     <Box mb={2}>
       <Button
@@ -16,7 +18,7 @@ const Navigation = () => {
         <WestIcon />
       </Button>
       <Button
-        disabled={hasBackPage}
+        disabled={!hasForwardPage}
         onClick={() => navigate(1)}
         variant="contained"
       >

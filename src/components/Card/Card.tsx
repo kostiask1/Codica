@@ -1,4 +1,5 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import RefreshIcon from "@mui/icons-material/Refresh"
 import {
   Accordion,
   AccordionDetails,
@@ -7,6 +8,7 @@ import {
   Card as MCard,
   CardContent,
   CardMedia,
+  Grid,
   List,
   ListItem,
   ListItemText,
@@ -17,9 +19,6 @@ import { Link } from "react-router-dom"
 import { useGetCityQuery } from "../../app/api"
 import { useAppDispatch } from "../../app/hooks"
 import { deleteCity } from "../../app/weatherSlice"
-import RefreshIcon from "@mui/icons-material/Refresh"
-import { Box } from "@mui/material"
-import { Grid } from "@mui/material"
 const Chart = lazy(() => import("../../components/Chart"))
 
 interface Props {
@@ -56,16 +55,17 @@ const Card: FC<Props> = ({ city, extended = false }) => {
   return (
     <>
       <MCard variant="outlined" sx={{ backgroundColor: "#9ce2ff" }}>
-        <Button onClick={refetch} variant="contained">
-          <RefreshIcon /> Update data
+        <Button onClick={refetch} variant="contained" endIcon={<RefreshIcon />}>
+          Update data
         </Button>
         <CardContent>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Link to={`/${data.name}`}>
-              <Typography variant="h4" component="span">
-                {data.name}
-              </Typography>
-            </Link>
+          <Link
+            to={`/${data.name}`}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <Typography variant="h4" component="span">
+              {data.name}
+            </Typography>
             <Typography sx={{ ml: 5 }} variant="h6">
               {Math.round(main.temp)} °C
             </Typography>
@@ -76,7 +76,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
               style={{ aspectRatio: "1/1", width: "unset" }}
               alt={weather[0].main}
             />
-          </Box>
+          </Link>
           <Typography variant="h5" component="div">
             {weather[0].description}
           </Typography>

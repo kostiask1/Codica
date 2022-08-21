@@ -1,17 +1,20 @@
-import { useState } from "react"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { RootState } from "../../app/store"
-import { deleteCity, setCities } from "../../app/weatherSlice"
-import { ICity } from "../../types"
-import { setError, setSuccess } from "../../app/appSlice"
-import { Box, Button } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 import {
+  Box,
+  Button,
   Checkbox,
   FormControlLabel,
+  IconButton,
   List,
   ListItem,
   TextField,
 } from "@mui/material"
+import { useState } from "react"
+import { setError, setSuccess } from "../../app/appSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { RootState } from "../../app/store"
+import { deleteCity, setCities } from "../../app/weatherSlice"
+import { ICity } from "../../types"
 
 const CityForm = () => {
   const dispatch = useAppDispatch()
@@ -62,7 +65,13 @@ const CityForm = () => {
                 }
                 label={city.name}
               />
-              <button onClick={() => handledeleteCity(city.name)}>x</button>
+              <IconButton
+                color="error"
+                size="small"
+                onClick={() => handledeleteCity(city.name)}
+              >
+                <CloseIcon />
+              </IconButton>
             </ListItem>
           ))}
         </List>
