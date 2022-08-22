@@ -12,12 +12,12 @@ import { useState } from "react"
 import { setError, setSuccess } from "../../app/appSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { RootState } from "../../app/store"
-import { deleteCity, setCities } from "../../app/weatherSlice"
+import { deleteCity, setCities } from "../../app/citiesSlice"
 import { ICity } from "../../types"
 
 const CityForm = () => {
   const dispatch = useAppDispatch()
-  const cities = useAppSelector((state: RootState) => state.weather.cities)
+  const cities = useAppSelector((state: RootState) => state.cities.array)
   const [city, setCity] = useState("")
 
   const handleCityInput = (e: React.ChangeEvent<HTMLInputElement>) => {

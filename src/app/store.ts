@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit"
 import appReducer from "./appSlice"
-import weatherReducer from "./weatherSlice"
+import citiesReducer from "./citiesSlice"
 import { weatherApi } from "./api"
 
 export const store = configureStore({
   reducer: {
     app: appReducer,
-    weather: weatherReducer,
+    cities: citiesReducer,
     weatherApi: weatherApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

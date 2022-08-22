@@ -6,7 +6,7 @@ import CityForm from "../../components/CityForm"
 import { ICity } from "../../types"
 
 const List = () => {
-  const cities = useAppSelector((state: RootState) => state.weather.cities)
+  const cities = useAppSelector((state: RootState) => state.cities.array)
   return (
     <>
       <CityForm />

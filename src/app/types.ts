@@ -1,7 +1,7 @@
 import { ICity } from "../types"
 
-export interface WeatherState {
-  cities: ICity[]
+export interface CitiesState {
+  array: ICity[]
 }
 
 export interface AppState {

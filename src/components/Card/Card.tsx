@@ -18,10 +18,10 @@ import {
   Typography,
 } from "@mui/material"
 import { FC, lazy, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useGetCityQuery } from "../../app/api"
 import { useAppDispatch } from "../../app/hooks"
-import { deleteCity } from "../../app/weatherSlice"
+import { deleteCity } from "../../app/citiesSlice"
 import { setSuccess } from "../../app/appSlice"
 const Chart = lazy(() => import("../../components/Chart"))
 
@@ -32,6 +32,7 @@ interface Props {
 
 const Card: FC<Props> = ({ city, extended = false }) => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { data, error, refetch, isLoading } = useGetCityQuery(city)
   const [expanded, setExpanded] = useState<string | false>(extended && "panel1")
 
@@ -40,6 +41,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
     name: string
   ) => {
     e.preventDefault()
+    navigate("/")
     dispatch(deleteCity(name))
   }
   if (error)

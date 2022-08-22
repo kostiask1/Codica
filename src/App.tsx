@@ -2,7 +2,7 @@ import { Container, createTheme, ThemeProvider } from "@mui/material"
 import { lazy, Suspense, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 import { useAppDispatch } from "./app/hooks"
-import { setCities } from "./app/weatherSlice"
+import { setCities } from "./app/citiesSlice"
 import Snackbar from "./components/Snackbar/Snackbar"
 import Navigation from "./components/Navigation/Navigation"
 const City = lazy(() => import("./pages/City/City"))
