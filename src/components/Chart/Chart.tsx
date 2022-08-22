@@ -1,7 +1,6 @@
 import { Box, CardMedia } from "@mui/material"
 import { FC, useMemo } from "react"
 import { useGetCityHourlyQuery } from "../../app/api"
-import CelciusIcon from "../CelciusIcon"
 import "./Chart.scss"
 
 interface Props {
@@ -40,9 +39,7 @@ const Chart: FC<Props> = ({ city }) => {
             }}
           >
             <span>{item.dt_txt.slice(5, item.dt_txt.length - 3)}</span>
-            <p>
-              {Math.round(item.main.temp)} <CelciusIcon />
-            </p>
+            <p>{Math.round(item.main.temp)} °C</p>
             <CardMedia
               component="img"
               height="60"
