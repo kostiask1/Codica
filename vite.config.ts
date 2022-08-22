@@ -4,6 +4,7 @@ import Checker from "vite-plugin-checker"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/Codica/",
   build: {
     outDir: "build",
   },
