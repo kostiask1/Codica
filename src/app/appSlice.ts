@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createSlice } from "@reduxjs/toolkit"
-import { AppState } from "./types"
 import { AppDispatch } from "./store"
+import { AppState } from "./types"
 
 const initialState: AppState = {
   error: "",
@@ -23,13 +23,10 @@ const app = createSlice({
 
 export default app.reducer
 
-// Actions
-
 export const { error, success } = app.actions
 
 let timer: boolean = false
 
-// Set error
 export const setError = (msg: string) => {
   return (dispatch: AppDispatch) => {
     if (timer) {
@@ -41,7 +38,6 @@ export const setError = (msg: string) => {
   }
 }
 
-// Set success
 export const setSuccess = (msg: string) => {
   return (dispatch: AppDispatch) => {
     if (timer) {

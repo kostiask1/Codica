@@ -1,10 +1,11 @@
 import { Container, createTheme, ThemeProvider } from "@mui/material"
 import { lazy, Suspense, useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
-import { useAppDispatch } from "./app/hooks"
 import { setCities } from "./app/citiesSlice"
-import Snackbar from "./components/Snackbar/Snackbar"
+import { useAppDispatch } from "./app/hooks"
 import Navigation from "./components/Navigation/Navigation"
+import Snackbar from "./components/Snackbar/Snackbar"
+import { getStorage } from "./helpers"
 const City = lazy(() => import("./pages/City/City"))
 const List = lazy(() => import("./pages/List"))
 
@@ -12,7 +13,7 @@ function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const cities = JSON.parse(localStorage.getItem("cities") || "[]")
+    const cities = getStorage("cities")
     dispatch(setCities(cities))
   }, [])
 
@@ -24,6 +25,7 @@ function App() {
       },
     },
   })
+
   return (
     <ThemeProvider theme={theme}>
       <Container>

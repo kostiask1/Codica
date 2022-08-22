@@ -8,13 +8,12 @@ import {
   IconButton,
   TextField,
 } from "@mui/material"
-import { useState } from "react"
-import { setError, setSuccess } from "../../app/appSlice"
+import { useCallback, useState } from "react"
+import { deleteCity, saveCity, setCities } from "../../app/citiesSlice"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { RootState } from "../../app/store"
-import { deleteCity, setCities } from "../../app/citiesSlice"
-import { ICity } from "../../types"
 import { capitalizeFirstLetter } from "../../helpers"
+import { ICity } from "../../types"
 
 const CityForm = () => {
   const dispatch = useAppDispatch()
@@ -26,29 +25,30 @@ const CityForm = () => {
     if (value.trim().length < 40) setCity(capitalizeFirstLetter(value))
   }
 
-  const addCity = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (city.length < 2) return dispatch(setError("City name is too short"))
-    const isExist = cities.findIndex((c: ICity) => c.name === city)
-    if (isExist !== -1) return dispatch(setError("City already exist"))
-    dispatch(
-      setCities([
-        ...cities,
-        { name: city, show: true, id: new Date().getTime() },
-      ])
-    )
-    dispatch(setSuccess("City added"))
-    setCity("")
-  }
+  const addCity = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      await dispatch(saveCity(city))
+      setCity("")
+    },
+    [city]
+  )
 
-  const handledeleteCity = (name: string) => dispatch(deleteCity(name))
+  const handleDeleteCity = useCallback(
+    (name: string) => dispatch(deleteCity(name)),
+    []
+  )
 
-  const handleCityShow = (id: number) => {
-    const citiesClone: ICity[] = JSON.parse(JSON.stringify(cities))
-    const index = citiesClone.findIndex((city) => city.id === id)
-    citiesClone[index].show = !citiesClone[index].show
-    dispatch(setCities(citiesClone))
-  }
+  const handleCityShow = useCallback(
+    (id: number) => {
+      const citiesClone: ICity[] = JSON.parse(JSON.stringify(cities))
+      const index = citiesClone.findIndex((city) => city.id === id)
+      citiesClone[index].show = !citiesClone[index].show
+      dispatch(setCities(citiesClone))
+    },
+    [cities]
+  )
+
   return (
     <>
       {!!cities.length && (
@@ -67,7 +67,7 @@ const CityForm = () => {
               <IconButton
                 color="error"
                 size="small"
-                onClick={() => handledeleteCity(city.name)}
+                onClick={() => handleDeleteCity(city.name)}
               >
                 <CloseIcon />
               </IconButton>

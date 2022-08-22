@@ -1,8 +1,29 @@
-import { Alert } from "@mui/material"
-import { useAppSelector, useAppDispatch } from "../../app/hooks"
-import { RootState } from "../../app/store"
-import Snack from "@mui/material/Snackbar"
+import { Alert, AlertColor } from "@mui/material"
+import SnackComponent from "@mui/material/Snackbar"
+import { FC } from "react"
 import { setError, setSuccess } from "../../app/appSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { RootState } from "../../app/store"
+
+interface SnackProps {
+  type: AlertColor
+  msg: string
+  handleClose: (type: AlertColor) => void
+}
+
+const Snack: FC<SnackProps> = ({ type, msg, handleClose }) => (
+  <SnackComponent
+    open={!!msg}
+    autoHideDuration={6000}
+    onClose={() => handleClose(type)}
+    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+  >
+    <Alert severity={type} sx={{ width: "100%" }}>
+      {msg}
+    </Alert>
+  </SnackComponent>
+)
+
 const Snackbar = () => {
   const dispatch = useAppDispatch()
   const { error, success } = useAppSelector((state: RootState) => ({
@@ -11,35 +32,14 @@ const Snackbar = () => {
   }))
 
   const handleClose = (type: string) => {
-    if (type === "error") {
-      dispatch(setError(""))
-    }
-    if (type === "success") {
-      dispatch(setSuccess(""))
-    }
+    if (type === "error") dispatch(setError(""))
+    if (type === "success") dispatch(setSuccess(""))
   }
+
   return (
     <>
-      <Snack
-        open={!!success}
-        autoHideDuration={6000}
-        onClose={() => handleClose("success")}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert severity="success" sx={{ width: "100%" }}>
-          {success}
-        </Alert>
-      </Snack>
-      <Snack
-        open={!!error}
-        autoHideDuration={6000}
-        onClose={() => handleClose("error")}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {error}
-        </Alert>
-      </Snack>
+      <Snack type="success" msg={success} handleClose={handleClose} />
+      <Snack type="error" msg={error} handleClose={handleClose} />
     </>
   )
 }

@@ -1,5 +1,5 @@
 import { Box, CardMedia } from "@mui/material"
-import { FC } from "react"
+import { FC, useMemo } from "react"
 import { useGetCityHourlyQuery } from "../../app/api"
 import CelciusIcon from "../CelciusIcon"
 import "./Chart.scss"
@@ -10,15 +10,19 @@ interface Props {
 
 const Chart: FC<Props> = ({ city }) => {
   const { data, isLoading, error } = useGetCityHourlyQuery(city)
+  const medium = useMemo(
+    () =>
+      Math.round(
+        data?.list?.reduce((acc: any, cur: any) => {
+          return acc + cur.main.temp
+        }, 0) / data?.list?.length
+      ),
+    [data]
+  )
   if (error)
     return <>Error while loading, probably you entered city name wrong</>
   if (isLoading) return <></>
 
-  const medium = Math.round(
-    data?.list?.reduce((acc: any, cur: any) => {
-      return acc + cur.main.temp
-    }, 0) / data.list.length
-  )
   return (
     <Box className="chart" sx={{ backgroundColor: "primary.light" }}>
       {!!data.list.length &&
@@ -43,7 +47,7 @@ const Chart: FC<Props> = ({ city }) => {
               component="img"
               height="60"
               image={`http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
-              style={{ aspectRatio: "1/1", width: "unset" }}
+              sx={{ aspectRatio: "1/1", width: "unset" }}
               alt={item.weather[0].main}
             />
           </div>
