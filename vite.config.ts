@@ -7,6 +7,5 @@ export default defineConfig({
   build: {
     outDir: "build",
   },
-  base: "/Codica/",
   plugins: [Checker({ typescript: true }), react()],
 })

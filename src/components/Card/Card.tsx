@@ -42,7 +42,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
     name: string
   ) => {
     e.preventDefault()
-    navigate("/Codica")
+    navigate("/")
     dispatch(deleteCity(name))
   }
   if (error)
@@ -78,7 +78,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
   return (
     <>
       <MCard variant="outlined" sx={{ backgroundColor: "primary.light" }}>
-        <Link to={`/Codica/${data.name}`}>
+        <Link to={`/${data.name}`}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Button
               onClick={refetchData}
