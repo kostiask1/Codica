@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { RootState } from "../../app/store"
 import { deleteCity, setCities } from "../../app/citiesSlice"
 import { ICity } from "../../types"
+import { capitalizeFirstLetter } from "../../helpers"
 
 const CityForm = () => {
   const dispatch = useAppDispatch()
@@ -22,8 +23,7 @@ const CityForm = () => {
 
   const handleCityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    if (value.trim().length < 40)
-      setCity(value.charAt(0).toUpperCase() + value.slice(1))
+    if (value.trim().length < 40) setCity(capitalizeFirstLetter(value))
   }
 
   const addCity = (e: React.FormEvent) => {

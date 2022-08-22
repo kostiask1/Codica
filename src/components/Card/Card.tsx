@@ -23,6 +23,7 @@ import { useGetCityQuery } from "../../app/api"
 import { useAppDispatch } from "../../app/hooks"
 import { deleteCity } from "../../app/citiesSlice"
 import { setSuccess } from "../../app/appSlice"
+import { capitalizeFirstLetter } from "../../helpers"
 const Chart = lazy(() => import("../../components/Chart"))
 
 interface Props {
@@ -76,7 +77,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
 
   return (
     <>
-      <MCard variant="outlined" sx={{ backgroundColor: "#9ce2ff" }}>
+      <MCard variant="outlined" sx={{ backgroundColor: "primary.light" }}>
         <Link to={`/${data.name}`}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Button
@@ -111,8 +112,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
               />
             </Box>
             <Typography variant="h5" component="div">
-              {weather[0].description.charAt(0).toUpperCase() +
-                weather[0].description.slice(1)}
+              {capitalizeFirstLetter(weather[0].description)}
             </Typography>
             <Accordion
               expanded={expanded === "panel1"}

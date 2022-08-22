@@ -1,4 +1,4 @@
-import { CardMedia, Box } from "@mui/material"
+import { Box, CardMedia } from "@mui/material"
 import { FC } from "react"
 import { useGetCityHourlyQuery } from "../../app/api"
 import CelciusIcon from "../CelciusIcon"
@@ -20,7 +20,7 @@ const Chart: FC<Props> = ({ city }) => {
     }, 0) / data.list.length
   )
   return (
-    <Box className="chart" sx={{ backgroundColor: "#9ce2ff" }}>
+    <Box className="chart" sx={{ backgroundColor: "primary.light" }}>
       {!!data.list.length &&
         data.list.map((item: any) => (
           <div
