@@ -13,7 +13,7 @@ const Chart: FC<Props> = ({ city }) => {
   const medium = useMemo(
     () =>
       Math.round(
-        data?.list?.reduce((acc: any, cur: any) => {
+        data?.list?.reduce((acc: number, cur: any) => {
           return acc + cur.main.temp
         }, 0) / data?.list?.length
       ),
