@@ -32,8 +32,8 @@ function App() {
         <Navigation />
         <Suspense fallback={<></>}>
           <Routes>
-            <Route path="/" element={<List />}></Route>
-            <Route path="/:city" element={<City />}></Route>
+            <Route path="/Codica" element={<List />}></Route>
+            <Route path="/Codica/:city" element={<City />}></Route>
           </Routes>
         </Suspense>
         <Snackbar />
