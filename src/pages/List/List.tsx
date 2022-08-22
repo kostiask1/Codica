@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 
 const List = () => {
   const cities = useAppSelector((state: RootState) => state.cities.array)
-  const [width, setWidth] = useState(0)
+  const [width, setWidth] = useState(window.innerWidth)
   const debouncedWidth = useDebounce(width, 500)
 
   useEffect(() => {
