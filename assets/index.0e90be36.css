@@ -1,0 +1,1 @@
+.chart{display:flex;align-items:center;overflow-x:auto;height:200px;padding:0 15px}.chart__cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5px}.chart__cell span{white-space:nowrap}.chart__cell p{margin:5px 0}
