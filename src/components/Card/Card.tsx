@@ -71,7 +71,7 @@ const Card: FC<Props> = ({ city, extended = false }) => {
   const refetchData = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     refetch()
-    dispatch(setSuccess(`Data about ${city} city is refreshed`))
+    dispatch(setSuccess(`Data about "${city}" is refreshed`))
   }
 
   return (
